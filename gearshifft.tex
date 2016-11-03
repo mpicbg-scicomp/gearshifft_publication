@@ -64,8 +64,10 @@ TU Dresden, 01062 Dresden, Germany\\
 			maxnames=3,
 			bibencoding=utf8
 ]{biblatex}
-\bibliography{bibs}
-\addbibresource{bibs.bib}
+
+% \bibliography{bibs}
+\bibliography{gearshifft_references}
+\addbibresource{gearshifft_references.bib}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -81,11 +83,12 @@ TU Dresden, 01062 Dresden, Germany\\
 \maketitle              % typeset the title of the contribution
 
 \begin{abstract}
-The abstract should summarize the contents of the paper
-using at least 70 and at most 150 words. It will be set in 9-point
-font size and be inset 1.0 cm from the right and left margins.
-There will be two blank lines before and after the Abstract. \dots
-\keywords{computational geometry, graph theory, Hamilton cycles}
+  Fast Fourier Transforms (FFTs) are exploited in a wide variety of fields ranging from computer science to natural sciences and engineering. Most applications use frequency field information for filtering in a myriad of fashions. With the rising data production bandwidths of experimental hardware and modern simulations, judging best what algorithmic tool to apply can be instrumental if not vital to any scientific endavour. FFTs are no exception to this. Moreover, as tailored FFT implementations exist for an ever increasing variety of high performance computer hardware, choosing the best performing FFT implementation has strong implications for the hardware to purchase in the future, for resources FFTs consume and for possibly decisive financal and time savings ahead of the competition. We therefor present an open-source and vendor agnostic benchmark suite, called gearshifft, to process a wide variety of problem sizes and types with state-of-the-art FFT implementations (fftw, clFFT and cuFFT). Gearshifft allows for a reproducible, unbiased and fair comparison on a wide variety of hardware to explore which FFT variant is best for a given problem size.
+% The abstract should summarize the contents of the paper
+% using at least 70 and at most 150 words. It will be set in 9-point
+% font size and be inset 1.0 cm from the right and left margins.
+% There will be two blank lines before and after the Abstract. \dots
+% \keywords{computational geometry, graph theory, Hamilton cycles}
 \end{abstract}
 
 \section{Test}
@@ -116,30 +119,29 @@ Refer to \cref{def:d2} with \cref{eq:e2} in \cref{sec:test} for \cref{thm:t1}.
 Please read \cite{montecarlo}.
 
 \section{Introduction}
-% - what has been done
-% - why gearshifft
-% - status of gearshifft dev
+\label{sec:intro}
+\include{intro}
+
+\section{Related Work}
+\label{sec:related}
+\include{relatex}
 
 \section{Benchmark Model}
-% - describe the benchmark use cases
+\label{sec:benchmark_model}
+\include{benchmark_model}
 
 \section{Implementation}
-% - [open source] framework: c++14 with help of boost
-% - demonstrate usage of gearshifft framework
-% - cufft, clfft, fftw
-% - issues?
+\label{sec:implementation}
+\include{implementation}
 
 \section{Results}
-% - show measurements
-% - analysis
+\label{sec:results}
+\include{results}
 
-\section{Conclusion}
-% - what can we conclude and recommend by the results?
-% - what remains as part of future work?
-% - issues?
-% - encourage community-driven benchmark?
+\section{Summary}
+\label{sec:summary}
+\include{summary}
 
 \printbibliography
-
 
 \end{document}
