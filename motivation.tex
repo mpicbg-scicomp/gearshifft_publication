@@ -5,7 +5,7 @@ A FFT is a fast implementation of the discrete Fourier transform which is a stan
   X[k] = \sum_{j=0}^{n-1} x[j]e^{\frac{-2\pi\sqrt{-1}jk}{n}}
 \end{equation}
 %
-with $k$ being an integer index within $0 \le k < n$. This operation was found to be computable in $\mathcal{O}(n \log n)$ complexity by Cooley-Turkey \cite{cooley1965algorithm}, which in turn rediscovered findings by Gauss \cite{gauss}. The basis the Cooley-Turkey approach is the observation that, given the factorization of $n=n_1n_2$, the  DFT of size $n$ can be rewritten by smaller DFTs of size $n_1$ and $n_2$. Given the aforementioned indices $j=j_1n_2 + j_2$ and $k=k_1+k_2n_1$, \cref{eq:dft} can be re-expressed as:
+with $k$ being an integer index within $0 \le k < n$. This operation was found to be computable in $\mathcal{O}(n \log n)$ complexity by Cooley-Turkey \cite{cooley1965algorithm}, which in turn rediscovered findings by Gauss \cite{gauss}. The basis of the Cooley-Turkey approach is the observation that, given the factorization of $n=n_1n_2$, the  DFT of size $n$ can be rewritten by smaller DFTs of size $n_1$ and $n_2$. Given the aforementioned indices $j=j_1n_2 + j_2$ and $k=k_1+k_2n_1$, \cref{eq:dft} can be re-expressed as:
 %
 \begin{equation}
   \label{eq:cooley-turkey}

@@ -45,7 +45,7 @@ cufftExecC2C(plan, input_buffer, output, CUFFT_FORWARD);
 \label{ssec:gearshifft_arch}
 \gearshifft{} is developed as an open-source framework using C++ (following the 2014 ISO standard \cite{cpp14std}) and Boost Unit Test Framework (UTF, \cite{boost}). % for managing the tree of all the different benchmark cases.
 One goal is to have a unified benchmark infrastructure and an extensible set of FFT library clients. 
-These clients implement a given interface which is used by the benchmark framework. 
+These clients implement within \gearshifft{} a given interface which is picked up by the benchmark framework during compile-time. 
 The benchmark framework is independent of the used FFT library and provides the measuring environment, data handling and processing of results.
 Furthermore, by following that interface comparable results shall be obtained.
 Such a benchmark framework could be realized with inheritance or with template meta-programming. 
@@ -79,7 +79,7 @@ struct MyFFTClient;
 
 \begin{table}[tb]
 \centering
-\caption{Methods FFT client has to implement}\label{tab:implfft}
+\caption{Methods a FFT client in \gearshifft{} has to implement}\label{tab:implfft}
 \setlength{\tabcolsep}{12pt}
 \begin{tabular}{*{3}{c}}
   \toprule
@@ -92,7 +92,7 @@ struct MyFFTClient;
  \end{tabular}
 \end{table}
 
-The FFT client implementation class in \cref{lst:implfft_templ} is instantiated once per benchmark run and follows the {\textit{resource allocation is initialization}} (RAII) idiom \cite{stroustrup1994design}. \gearshifft{} invokes FFT client methods as listed \cref{tab:implfft} to perform the benchmarks and populate the benchmark data. The FFT client can assign user-defined template types to create different FFT client classes to mimic various use cases. An example is given by the \fftw{} implementation, which involves a compile-time constant configuration structure to map plan rigors like \mc{FFTW_MEASURE} or \mc{FFTW_ESTIMATE} into the aforementioned FFT client classes.
+The FFT client implementation class in \cref{lst:implfft_templ} is instantiated once per benchmark run and follows the {\textit{resource allocation is initialization}} (RAII) idiom \cite{stroustrup1994design}. \gearshifft{} invokes the FFT client methods listed in \cref{tab:implfft} to perform the benchmarks and populate the benchmark data. The FFT client can assign user-defined template types to create different FFT client classes to mimic various use cases. An example is given by the \fftw{} implementation, which involves a compile-time constant configuration structure to map plan rigors like \mc{FFTW_MEASURE} or \mc{FFTW_ESTIMATE} into the aforementioned FFT client classes.
 
 Depending on the FFT library, after a forward transform the same plan handle might be recreated for backward transform. This saves memory as there is only one plan allocated at any point in time and, for example, the GPU FFT libraries allocate memory for the plan on the device. \fftw{} can overwrite input and output buffers during the planning phase, when e.g. \mc{FFTW_MEASURE} is used. Afterwards, the buffers can be filled with data. In turn, this plan handle cannot be recreated later on, as the result buffer of the previous plan would be overwritten at plan recreation. In this case, the plans are allocated before the round-trip FFT starts.
 
@@ -127,11 +127,11 @@ int main( int argc, char* argv[] ) {
   return 0; }                                                        
 \end{lstlisting}
 
-For each benchmark configuration, a number of benchmark repetitions is performed to allow reliable statistical analysis. This is currently defined as compile-time constant in \mc{Application::NR_RUNS=5}. After a benchmark has been completed, the round-trip transformed data is validated against the original input data. If a mismatch is present, the benchmark is marked as failed and \gearshifft{} continues with the next configuration in the benchmark tree. The error bound for the sample deviation of input and output used for this error check is defined by \mc{Application::ERROR_BOUND=0.00001}. 
-
 A \gearshifft{} benchmark is defined in the back-end. It is meant to collect performance indicators of a set of operations defining implicitly the interface for the FFT clients. Different parameters like precision, FFT extents, transform variant, device type or FFT library relate to different benchmarks.
 \gearshifft{} controls many of them by command line arguments. The FFT libraries are related to different \gearshifft{} binaries (\mc{gearshifft_cufft}, \ldots).
-The back-end of \gearshifft{} uses Boost Unit Test Framework to generate the benchmark instances.
+The back-end of \gearshifft{} uses Boost Unit Test Framework to generate the benchmark instances within a tree data structure, i.e. the benchmark tree.
+
+For each benchmark configuration, a number of benchmark repetitions is performed to allow reliable statistical analysis. This is currently defined as compile-time constant in \mc{Application::NR_RUNS=5}. After a benchmark has been completed, the round-trip transformed data is validated against the original input data. If a mismatch is present, the benchmark is marked as failed and \gearshifft{} continues with the next configuration in the benchmark tree. The error bound for the sample deviation of input and output used for this error check is defined by \mc{Application::ERROR_BOUND=0.00001}. 
 
 The measurement layout and benchmark framework is illustrated in \cref{fig:framework}. One single run comprises time measurement of each operation (allocate, init forward, \ldots). The total time measures all from \mc{allocate} to \mc{destroy}. Furthermore, the memory footprint of the FFT client is recorded. The functor \mc{FFT} calls the FFT client operations wrapped with time measurements. The input data buffer is held by \mc{BenchmarkExecutor} and a copy is given to the \mc{FFT} functor in each run.
 
